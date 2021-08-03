@@ -1,0 +1,23 @@
+Разница между React.Component и React.PureComponent
+заключается в методе updating lifecycle: shouldComponentUpdate.
+
+shouldComponentUpdate вызывается перед отрисовкой при получении новых свойств или изменении состояния.
+По умолчанию используется значение true. Не вызывается при первой отрисовке.
+
+В React.Component этот метод выглядит так:
+shouldComponentUpdate() {
+ return true;
+}
+
+В React.PureComponent этот метод выглядит так:
+shouldComponentUpdate(nextProps, nextState) {
+ return !shallowEqual(nextProps, this.props) || !shallowEqual(nextState, this.state);
+}
+В PureComponent происходит поверхностное сравнение при изменении состояния и перерисовка происходит
+только если есть изменения в state или props компонента. Что помогает повысить производительность приложения.
+
+Все дочерние элементы также должны быть чистыми компонентами.
+
+PureComponent пропускает отрисовку не только самого компонента, но и всех его "детей",
+поэтому безопаснее всего его применять в presentational-компонентах,
+без "детей" и без и без зависомости от глобального состояния приложения.
